@@ -1,0 +1,797 @@
+<?php
+// Database connection
+$host = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'contact6_dib';
+
+$conn = mysqli_connect($host, $username, $password, $database);
+
+if (!$conn) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
+
+// Handle form submission
+if (isset($_POST['submit'])) {
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $services = mysqli_real_escape_string($conn, $_POST['services']);
+    $number = $_POST['number'];
+    $date = $_POST['date'];
+
+    // Prepare and execute the SQL statement using prepared statements
+    $stmt = mysqli_prepare($conn, "INSERT INTO contact6_form (name, email, services, number, date) VALUES (?, ?, ?, ?, ?)");
+
+    mysqli_stmt_bind_param($stmt, "sssss", $name, $email, $services, $number, $date);
+
+    if (mysqli_stmt_execute($stmt)) {
+        $message = 'Appointment made successfully. Thank you!';
+    } else {
+        $message = 'Appointment failed';
+    }
+
+    mysqli_stmt_close($stmt);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>NewGen Dental Clinic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.1/ionicons.min.js" integrity="sha512-pK+8P5ocLpI7Uu/i/HsLMm1hD7ti+hTWtF4jubimyU0xFLS6PvnZgsi/1D0vZOWI2x2LLrt9+wsQXdp7B+Q5Sg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+  function acceptTermsAndPrivacy() {
+    // Store acceptance status in local storage or perform any necessary actions
+
+    // Close the popup
+    var overlay = document.querySelector('.overlay');
+    overlay.style.display = 'none';
+
+    // Prevent form submission
+    return false;
+  }
+  </script>
+    <style>
+      /*pop up css*/
+      .overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    border: 1px;
+  }
+
+  .popup {
+    background-color: #fff;
+    padding: 20px;
+    max-width: 900px;
+    text-align: center;
+    border-radius: 25px;
+  }
+
+  .popup h2 {
+    margin-top: 0;
+    font-weight: bold;
+  }
+
+  .popup p {
+    text-align: justify;
+  }
+
+  .popup-content {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+    .popup button {
+  background-color: #006AFF;
+  border: none;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 16px;  
+  display: inline-block;
+  cursor: pointer;
+  margin-top: 10px;
+    }
+      /*css for body*/
+		.body {
+  background-color: #FFFEF1;
+
+}
+		
+        .container {
+            max-width: 100%;
+        }
+        
+        .center {
+            text-align: center;
+        }
+
+        .container {
+            display: inline-flex;
+          
+        }
+
+        img {
+            height: 200px;
+            width: auto;
+			justify-content: left;
+        }
+/*NAVBAR*/
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #012a7a;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+}
+
+.text1 {
+  color: #e7e7e7;
+  justify-content: center;
+}
+
+.navbar-nav {
+  display: flex;
+  justify-content: space-between; /* Adjust to create equal space between columns */
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  width: 100%; /* Make the navbar take full width */
+}
+.nav-link-h {
+margin-top: 0%;
+  margin-bottom: 0%;
+  margin-right: 15%;
+  font-weight: bold;
+}
+.navbar-nav .nav-item {
+  margin-top: 0%;
+  margin-bottom: 0%;
+  margin-right: 15%;
+  flex-basis: calc(100% / 6); /* Distribute the columns evenly */
+  font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+  color: #e7e7e7;
+  text-decoration: none;
+  padding: 0px; /* Adjust the padding as needed */
+  font-weight: bold;
+
+}
+
+.navbar-brand img {
+  height: 100px;
+  width: 100px;
+  margin: 0;
+  font-size: large;
+  color: #e7e7e7;
+}
+
+        /* Additional CSS */
+ @keyframes fade-delay {
+        0% { opacity: 0; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    .fade-delay {
+        animation: fade-delay 0.9s ease-in-out;
+    }
+
+.form {
+    background-color: rgb(246, 185, 0);
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 15%;
+    margin-top: 15%;
+    animation-delay: 5ms;
+    border-radius: 25px;
+    
+}
+
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.col-md-6 {
+    width: 50%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.mb-3 {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #006AFF;
+  border: none;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 16px;  
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    color: #fff;
+}
+/*Contact Us*/
+@keyframes fade-delay {
+        0% { opacity: 0; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    .fade-delay {
+        animation: fade-delay 0.9s ease-in-out;
+    }
+
+.container-2 {
+  background-color: #dddddd;
+  padding: 20px;
+  border-radius: 25px;
+  border: 1px ;
+  margin-bottom: 10%;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.col-md-3 {
+  flex: 0 0 25%;
+  max-width: 16.666668%;
+  padding-right: 15px;
+  padding-left: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.col-md-5 {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding-right: 15px;
+  padding-left: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cta-content {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.contact-item {
+  text-align: center;
+}
+
+.icon {
+  width: 50px;
+  height: 50px;
+}
+
+.bold {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.contact-link p {
+  margin-bottom: 0;
+}
+
+.normal {
+  margin-top: 5px;
+}
+
+.contact-link2 p {
+  margin-bottom: 0;
+}
+
+.normal-2 {
+  margin-top: 5px;
+}
+
+.icon-3 {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.normal-3 {
+  margin-top: 5px;
+}
+
+.contact-link3 p {
+  margin-bottom: 0;
+}
+
+/* contact 2*/
+.container-3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #012a7a;
+  padding: 20px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom: 0px;
+  border: 1px;
+  margin-top: 15%;
+  margin-top: 5%;
+}
+.column-mid {
+text-align: left;
+margin-right: 30%;
+color: #c9ab00;
+
+
+}
+.column {
+  flex: 1;
+  padding: 10px;
+}
+
+.center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.form-2 {
+  display: inline-block;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #012a7a;
+  color: #FFFFFF;
+}
+
+.form-2 label {
+  display: block;
+  font-weight: normal;
+}
+
+.form-2 input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center    ;
+}
+
+.form-2 input[type="email"]::placeholder {
+  opacity: 0.5;
+}
+
+.form-2 input[type="email"]:focus::placeholder {
+  opacity: 0;
+}
+
+.button-3 {
+  background-color: #006AFF;
+  border: none;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 16px;  
+  display: inline-block;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.button-3:hover {
+  background-color: #45a049;
+}
+
+/* Last part FOOTER CSS*/
+.footer-bottom-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgb(136, 136, 136);
+            flex-wrap: wrap; /* Wrap items to next line if needed */
+        }
+
+        .footer-bottom-list {
+            display: flex;
+            flex-wrap: wrap; /* Wrap items to next line if needed */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: center;
+        }
+
+        .footer-bottom-list li {
+            margin: 0 10px; /* Add some margin between list items */
+        }
+
+        .footer-bottom-link {
+            color: #333;
+        }
+    a:link {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+a:visited {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+a:hover {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+a:active {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+    </style>
+<meta charset="utf-8">
+</head>
+
+<body class="body">
+    <div class="container">
+        <div class="row">
+                <img src="nglogo.png" class="img-fluid" alt="Logo" style="max-height: 200px;">
+            </div>
+            <div class="text-right mb-4 ">
+                <p style="font-size: 24px;"><br>
+                  <br>
+                  New Gen Dental Clinic</p>
+                <p style="font-size: 16px;">We provide exeptional</em> dental care services to our patients at a reasonable cost.</p>
+            </div>
+        </div>
+    </div>
+
+<div class="overlay">
+  <div class="popup">
+    <h2>Terms and Conditions</h2>
+    <div class="popup-content">
+      <p>
+        These terms and conditions outline the rules and regulations for the use of New Gen Dental Clinic, which is located at Balgaan Place 1, Mayaman corner Kalayaan St., Quezon City, Philippines and 36C 2nd Floor L. De Guzman St. Concepcion Uno, Marikina City, Philippines.
+      </p>
+      <ol>
+        <li>
+          <strong>Scope of Services</strong>
+          <p>1.1 The dental clinic provides a range of dental services, including odontectomy, oral prophylaxis, dentures, braces, crowns/bridges/veneers.</p>
+        </li>
+        <li>
+          <strong>Appointments and Cancellations</strong>
+          <p>
+            2.1 Patients are required to schedule appointments in advance.<br>
+            2.2 Cancellations or rescheduling must be made at least 24 hours before the appointment time.<br>
+            2.3 Failure to provide timely notice of cancellation may result in a cancellation fee.
+          </p>
+        </li>
+        <li>
+          <strong>Payment Terms</strong>
+          <p>
+            3.1 Payment is due at the time of service.<br>
+            3.2 Accepted payment methods include cash and credit/debit cards.
+          </p>
+        </li>
+        <li>
+          <strong>Treatment Plans and Consent</strong>
+          <p>
+            4.1 Treatment plans will be discussed with patients, outlining recommended procedures, associated costs, and expected outcomes.<br>
+            4.2 Patients are encouraged to ask questions and provide informed consent before undergoing any treatment.
+          </p>
+        </li>
+        <li>
+          <strong>Privacy and Confidentiality</strong>
+          <p>
+            5.1 The dental clinic respects patient privacy and complies with applicable privacy laws.<br>
+            5.2 Patient information is securely stored and only disclosed as necessary for treatment, billing, or with the patient's consent.
+          </p>
+        </li>
+        <li>
+          <strong>Patient Responsibilities</strong>
+          <p>
+            6.1 Patients must provide accurate and complete medical history information.<br>
+            6.2 Patients are responsible for following oral care instructions, attending scheduled appointments, and promptly notifying the clinic of any changes in health or medications.
+          </p>
+        </li>
+        <li>
+          <strong>Complaints and Disputes</strong>
+          <p>
+            7.1 Patients with concerns or complaints are encouraged to discuss them directly with the clinic's management.<br>
+            7.2 In the event of a dispute, the parties agree to resolve it amicably through negotiation or mediation.
+          </p>
+        </li>
+        <li>
+          <strong>Liability Limitations</strong>
+          <p>
+            8.1 The dental clinic shall not be held liable for any risks or complications that are not associated with dental procedures.<br>
+            8.2 Patients understand and accept that certain inherent risks exist in dental treatment.
+          </p>
+        </li>
+        <li>
+          <strong>Termination of Services</strong>
+          <p>
+            9.1 The dental clinic reserves the right to terminate its services to a patient in cases of non-compliance with treatment plans, failure to follow clinic policies, or disruptive behavior.
+          </p>
+        </li>
+        <li>
+          <strong>Intellectual Property</strong>
+          <p>
+            10.1 All trademarks, logos, and proprietary content associated with the dental clinic are protected.<br>
+            10.2 Unauthorized use, reproduction, or modification of clinic materials is strictly prohibited.
+          </p>
+        </li>
+      </ol>
+    </div>
+    <form onsubmit="return acceptTermsAndPrivacy()">
+      <input type="checkbox" id="termsCheckbox" required>
+      <label for="termsCheckbox">I have read and agree to the Terms and Conditions and Privacy Policy.</label>
+      <br><br>
+      <button type="submit">Continue</button>
+    </form>
+  </div>
+</div>
+
+<nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="nglogo - Copy.png" alt="" width="100" height="50" />&nbsp;
+                <span class="text1" style="font-size: 18px;">New Gen Dental Clinic</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link-h" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-1" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-2" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-3" href="#">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-4" href="Branches.html">Branches</a>
+                    </li>
+                    <li class="nav-item">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="form border fade-delay" data-aos="fade-down-right" data-aos-delay="500" data-aos-duration="900" style="position: relative; overflow: hidden;">
+    <div class="row">
+        <div>
+            <?php if (isset($message)) : ?>
+                
+            <?php endif; ?> 
+            <form onsubmit="sendEmail(); return false;" action="connect.php" method="post" class="fade-delay">
+                <div class="form-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="first-name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Your name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="branch" class="form-label">Branches</label>
+                                <select class="form-control" id="branch" name="branch" required>
+                                    <option value="">Select a branch</option>
+                                    <option value="Kalayaan">Kalayaan</option>
+                                    <option value="Marikina">Marikina</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="example@email.com" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="services" class="form-label">Services</label>
+                                <select class="form-control" id="services" name="services[]" required>
+                                  <option value="">Select a service</option>
+                                    <option value="Tooth Extraction">Tooth Extraction (Bunot)</option>
+                                    <option value="Tooth Restoration">Tooth Restoration (Pasta)</option>
+                                    <option value="Oral Prophylaxis">Oral Prophylaxis (Linis)</option>
+                                    <option value="Teeth Whitening">Teeth Whitening</option>
+                                    <option value="Odontectomy">Odontectomy</option>
+                                    <option value="Braces & Retainers">Braces & Retainers</option>
+                                    <option value="Dentures">Dentures</option>
+                                    <option value="Crowns">Crowns</option>
+                                    <option value="Bridges">Bridges</option>
+                                    <option value="Veneers">Veneers</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="number" class="form-label">Cell Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">&#x1F1F5;&#x1F1ED; +63</span>
+                                    <input type="text" class="form-control" id="number" name="number" required maxlength="10" placeholder="9123456780">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>  
+    </div>
+</div>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+<script>
+   function sendEmail() {
+    Email.send({
+      Host: "smtp.gmail.com",
+      Username: "new.appointment.client@gmail.com",
+      Password: "#New.*Apppointment.$Account.%client.$*",
+      To: 'mayklisondra@gmail.com',
+      From: document.getElementById("email").value,
+      Subject: "New Appointment",
+      Body: "And this is the body"
+    }).then(
+    message => alert(message)
+    );    
+  }
+</script>
+<div class="container-2 fade-delay" style="background-color: #dddddd;">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="cta-content">
+                <h2 class="h2 section-title">Contact Us!</h2>
+                &nbsp;
+                <p class="section-subtitle">At New Gen Dental Clinic, we believe that everyone deserves a radiant smile that they can be proud of. Our team of skilled and compassionate dental professionals is dedicated to providing you with the highest quality dental care in a warm and welcoming environment. Whether you're in need of a routine check-up, teeth whitening, or more extensive dental work, we have the expertise and cutting-edge technology to help you achieve optimal oral health and the smile of your dreams. Don't wait any longer, contact us today and let us be your trusted partner in dental health. Contact us today!</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="contact-item">
+                <img src="C:\Users\Frank\Desktop\NewGEN\svg\mail-outline.svg" alt="Mail Icon" class="icon">
+                <p class="bold">Marikina Branch</p>
+                <a href="#" class="contact-link">
+                    <p class="normal">newgenconcepcion2023@gmail.com</p>
+                </a>
+                <p class="bold">Kalayaan Branch</p>
+                <a href="#" class="contact-link">
+                    <p class="normal">newgendentalclinic2022@gmail.com</p>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="contact-item">
+                <img src="C:\Users\Frank\Desktop\NewGEN\svg\call-outline.svg" alt="Call Icon" class="icon">
+                <p class="bold">Marikina Branch</p>
+                <a href="#" class="contact-link2">
+                    <p class="normal-2">+639602307867</p>
+                </a>
+                <p class="bold">Kalayaan Branch</p>
+                <a href="#" class="contact-link2">
+                    <p class="normal-2">+639338159800</p>
+                </a>
+            </div>   
+        </div>
+        <div class="col-md-3">
+            <div class="contact-item">
+                <img src="C:\Users\Frank\Desktop\NewGEN\svg\logo-facebook.svg" alt="Facebook Icon" class="icon-3">
+                <a href="https://www.facebook.com/newgendentalclinic" class="contact-link3">
+                    <p class="normal-3">@newgendentalclinic</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-3">
+    <div class="column">
+        <img src="C:\Users\Frank\Desktop\NewGEN\nglogo - Copy - Copy - Copy.png" alt="Logo-3" class="Logo-3">
+    </div>
+    <div class="column-mid">
+    <p style="font-size: 24px;">
+        New Gen Dental Clinic
+    </p>
+    <p style="font-size: 16px;">
+        We provide exceptional dental care services to our patients at a reasonable cost.
+        </p>
+</div>
+
+    <div class="column center">
+        <form class="form-2">
+            <label for="email">Never miss out on exciting upcoming Promotions!</label>
+            <input type="email" id="email" name="email" placeholder="example@email.com"><br><br>
+            <button class="button-3" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+</body>
+
+
+<div class="footer-bottom">
+    <div class="containerBOT">
+        <div class="footer-bottom-content">
+            <ul class="footer-bottom-list">
+                <li>
+                    <a href="#" class="footer-bottom-link">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="footer-bottom-link">Term & Condition</a>
+                </li>
+                <li>
+                    <a href="#" class="footer-bottom-link">FAQ</a>
+                </li>
+            </ul>
+            <p class="copyright">
+                &copy; 2023&nbsp; <a href="">New Gen Dental Clinic&nbsp;</a>. All rights reserved
+            </p>
+        </div>
+    </div>
+</div>
+
+    </footer>
+</html>
