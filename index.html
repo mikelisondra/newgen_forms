@@ -610,7 +610,7 @@ a:active {
             <?php if (isset($message)) : ?>
                 
             <?php endif; ?> 
-            <form onsubmit="sendEmail(); return false;" action="connect.php" method="post" class="fade-delay">
+            <form action="https://formsubmit.co/mayklisondra@email.com" method="POST" class="fade-delay">
                 <div class="form-container">
                     <div class="row">
                         <div class="col-md-6">
@@ -686,22 +686,6 @@ a:active {
         </div>  
     </div>
 </div>
-<script src="https://smtpjs.com/v3/smtp.js"></script>
-<script>
-   function sendEmail() {
-    Email.send({
-      Host: "smtp.gmail.com",
-      Username: "new.appointment.client@gmail.com",
-      Password: "#New.*Apppointment.$Account.%client.$*",
-      To: 'mayklisondra@gmail.com',
-      From: document.getElementById("email").value,
-      Subject: "New Appointment",
-      Body: "And this is the body"
-    }).then(
-    message => alert(message)
-    );    
-  }
-</script>
 <div class="container-2 fade-delay" style="background-color: #dddddd;">
     <div class="row">
         <div class="col-md-5">
